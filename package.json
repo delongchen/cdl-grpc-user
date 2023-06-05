@@ -9,9 +9,12 @@
   "license": "ISC",
   "dependencies": {
     "@grpc/grpc-js": "^1.8.14",
+    "@types/node-rsa": "^1.1.1",
     "cdl-grpc": "github:delongchen/cdl-grpc#master",
     "google-protobuf": "^3.21.2",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-rsa": "^1.1.1",
+    "yaml": "^2.3.1"
   },
   "devDependencies": {
     "@types/mysql": "^2.15.21",

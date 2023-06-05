@@ -1,4 +1,8 @@
 node_modules
 dist
 .idea
+key
+test
 pnpm-lock.yaml
+
+app-config.yml

@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto'
 
 const publicKeyRaw = readFileSync('./key/app_public_key.pem')
 const publicKey = new NodeRSA(publicKeyRaw)
-const getSHA256 = (s: string) =>
+export const getSHA256 = (s: string) =>
   createHash('sha256')
     .update(s)
     .digest('hex')

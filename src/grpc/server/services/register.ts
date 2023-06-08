@@ -1,25 +1,41 @@
 import {GrpcServiceImplFn} from "../../../types/grpc";
-import {RegisterRequest, RegisterResponse, RegisterStatus, UserType} from "cdl-grpc";
+import {auth} from "cdl-grpc";
 import {userMailMap, newUserID, addUserCache} from "../../../store/user";
 import {getSHA256} from "../../../rsa";
 import {userTable} from "../../../data/maria";
 import {CdlUser} from "../../../types/CdlUser";
+import {mailCodeMap} from "../../../store/mail";
 
 
 const checkUserInfo = (info: CdlUser): string | undefined => {
   return
 }
 
-export const registerHandler: GrpcServiceImplFn<RegisterRequest, RegisterResponse> = (call, callback) => {
-  const {mail, password} = call.request.toObject()
-  const res = new RegisterResponse()
+export const registerHandler: GrpcServiceImplFn<auth.RegisterRequest, auth.RegisterResponse> = (call, callback) => {
+  const {mail, password, code} = call.request.toObject()
+  const res = new auth.RegisterResponse()
 
   const exist = userMailMap.get(mail)
   if (exist !== undefined) {
-    res.setStatus(RegisterStatus.ERROR_NAME_EXIST)
+    res.setStatus(auth.RegisterStatus.ERROR_NAME_EXIST)
     res.setMsg('the e-mail already exists!')
     callback(null, res)
   } else {
+    const authCode = mailCodeMap.get(mail)
+    if (authCode === undefined) {
+      res.setStatus(auth.RegisterStatus.ERROR_PASSWORD_ILLEGAL)
+      res.setMsg('auth code not exists')
+      callback(null, res)
+      return
+    }
+
+    if (authCode.code !== code) {
+      res.setStatus(auth.RegisterStatus.ERROR_PASSWORD_ILLEGAL)
+      res.setMsg('auth code error')
+      callback(null, res)
+      return
+    }
+
     const pswHash = getSHA256(password)
     const id = newUserID()
     const user: CdlUser = {
@@ -27,17 +43,17 @@ export const registerHandler: GrpcServiceImplFn<RegisterRequest, RegisterRespons
       mail,
       name: `wx${id}`,
       password: pswHash,
-      level: UserType.NORMAL
+      level: auth.UserType.NORMAL
     }
 
     userTable.insert(user)
       .then(() => {
         addUserCache(user)
-        res.setStatus(RegisterStatus.REGISTER_OK)
+        res.setStatus(auth.RegisterStatus.REGISTER_OK)
         res.setMsg('ok')
       })
       .catch(reason => {
-        res.setStatus(RegisterStatus.ERROR_PASSWORD_ILLEGAL)
+        res.setStatus(auth.RegisterStatus.ERROR_PASSWORD_ILLEGAL)
         res.setMsg('500')
       })
       .finally(() => {

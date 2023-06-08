@@ -1,6 +1,6 @@
 //this file is auto gen by 'gen-config.ts'
 //to check config file
-//time Tue Jun 06 2023 05:52:47 GMT+0800 (China Standard Time)
+//Wed Jun 07 2023 03:31:35 GMT+0800 (China Standard Time)
 
 import {parse} from 'yaml'
 import {readFileSync} from 'node:fs'
@@ -34,7 +34,13 @@ const items: [string, string][] = [
   ["mariadb.port","number"],
   ["mariadb.user","string"],
   ["mariadb.password","string"],
-  ["mariadb.database","string"]
+  ["mariadb.database","string"],
+  ["mail.transporter.host","string"],
+  ["mail.transporter.port","number"],
+  ["mail.transporter.secure","boolean"],
+  ["mail.transporter.auth.user","string"],
+  ["mail.transporter.auth.pass","string"],
+  ["mail.from","string"]
 ]
 
 for (const item of items) {
@@ -63,6 +69,18 @@ export interface AppConfig {
     user: string
     password: string
     database: string
+  }
+  mail: {
+    transporter: {
+      host: string
+      port: number
+      secure: boolean
+      auth: {
+        user: string
+        pass: string
+      }
+    }
+    from: string
   }
 }
 

@@ -10,10 +10,12 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.14",
     "@types/node-rsa": "^1.1.1",
+    "@types/nodemailer": "^6.4.8",
     "cdl-grpc": "github:delongchen/cdl-grpc#master",
     "google-protobuf": "^3.21.2",
     "mysql": "^2.18.1",
     "node-rsa": "^1.1.1",
+    "nodemailer": "^6.9.3",
     "yaml": "^2.3.1"
   },
   "devDependencies": {

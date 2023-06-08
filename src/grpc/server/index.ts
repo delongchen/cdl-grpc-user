@@ -1,15 +1,17 @@
 import { Server, ServerCredentials } from '@grpc/grpc-js'
 import {appConfig} from "../../config";
-import {UserService} from "cdl-grpc";
+import {auth} from "cdl-grpc";
 
 import {loginHandler} from "./services/login";
 import {registerHandler} from "./services/register";
+import {mailHandler} from "./services/mail";
 
 const grpcServer = new Server()
 
-grpcServer.addService(UserService, {
+grpcServer.addService(auth.UserService, {
   login: loginHandler,
-  register: registerHandler
+  register: registerHandler,
+  mail: mailHandler
 })
 
 export const startGrpcServer = () => new Promise<number>((resolve, reject) => {

@@ -1,6 +1,8 @@
 {
   "exclude": [
-    "./node_modules"
+    "./node_modules",
+    "./test",
+    "./gen-config.ts"
   ],
   "compilerOptions": {
     "target": "ESNext",
